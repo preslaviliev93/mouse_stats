@@ -8,6 +8,7 @@ class Tracker:
         self.pixel_to_cm = 0.0264583
         self.total_distance_cm = 0.0
         self.last_position = None
+        self.total_times_button_pressed = 0
 
     def on_move(self, x, y):
         if self.last_position is not None:
@@ -17,8 +18,12 @@ class Tracker:
             self.total_distance_cm += distance_px * self.pixel_to_cm
         self.last_position = (x, y)
 
+    def on_click(self, x, y, button, pressed):
+        if pressed:
+            self.total_times_button_pressed += 1
+
     def main(self):
-        listener = mouse.Listener(on_move=self.on_move)
+        listener = mouse.Listener(on_move=self.on_move, on_click=self.on_click)
         listener.start()
 
         print("Tracking mouse. Press Ctrl+C to stop (if supported).")
@@ -32,7 +37,9 @@ class Tracker:
             listener.stop()
 
         print(f"Final total distance: {self.total_distance_cm:.2f} cm")
+        print(f'Total times the buttons are pressed: {self.total_times_button_pressed}')
         input("Press Enter to close.")
+
 
 if __name__ == "__main__":
     tracker = Tracker()
