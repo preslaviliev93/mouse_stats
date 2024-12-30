@@ -1,45 +1,39 @@
 from pynput import mouse
 from math import hypot
+import time
 
 
 class Tracker:
-
     def __init__(self):
-        self.mouse = mouse.Controller()
-        self.click_counter = 0
-        self.distance_pixels = 0.0
-        self.last_pointer_position = None
-        self.pixels_per_meter = 3780
-
-    def read_pointer_current_position(self):
-        """
-        This method will read the current position of the mouse pointer
-        :return: tuple of coordinates, i.e. (1915,1028)
-        """
-        return self.mouse.position
+        self.pixel_to_cm = 0.0264583
+        self.total_distance_cm = 0.0
+        self.last_position = None
 
     def on_move(self, x, y):
-        if self.last_pointer_position is not None:
-            dx = x - self.last_pointer_position[0]
-            dy = y - self.last_pointer_position[1]
-            self.distance_pixels += hypot(dx, dy)
-        self.last_pointer_position = (x, y)
-
-    def on_click(self, x, y, button, pressed):
-        if pressed:
-            self.click_counter += 1
+        if self.last_position is not None:
+            dx = x - self.last_position[0]
+            dy = y - self.last_position[1]
+            distance_px = hypot(dx, dy)
+            self.total_distance_cm += distance_px * self.pixel_to_cm
+        self.last_position = (x, y)
 
     def main(self):
-        with mouse.Listener(on_move=self.on_move, on_click=self.on_click) as listener:
-            try:
-                listener.join()
-            except KeyboardInterrupt:
-                pass
-        distance_meters = self.distance_pixels / self.pixels_per_meter
-        print(f"Total clicks: {self.click_counter}")
-        print(f'Total distance {distance_meters} m.')
+        listener = mouse.Listener(on_move=self.on_move)
+        listener.start()
+
+        print("Tracking mouse. Press Ctrl+C to stop (if supported).")
+
+        try:
+            while True:
+                time.sleep(0.1)
+        except KeyboardInterrupt:
+            print("\nCaught KeyboardInterrupt. Exiting.")
+        finally:
+            listener.stop()
+
+        print(f"Final total distance: {self.total_distance_cm:.2f} cm")
 
 
-tracker = Tracker()
-distance = tracker.main()
-print(f"Total distance: {distance} m.")
+if __name__ == "__main__":
+    tracker = Tracker()
+    tracker.main()
