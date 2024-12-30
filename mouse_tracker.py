@@ -32,7 +32,7 @@ class Tracker:
             listener.stop()
 
         print(f"Final total distance: {self.total_distance_cm:.2f} cm")
-
+        input("Press Enter to close.")
 
 if __name__ == "__main__":
     tracker = Tracker()
