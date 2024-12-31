@@ -24,7 +24,7 @@ The **Mouse and Keyboard Tracker** is a Python project designed to monitor and t
 ### Steps
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo/mouse-keyboard-tracker.git
+   git clone [https://github.com/your-repo/mouse-keyboard-tracker.git](https://github.com/preslaviliev93/mouse_stats.git)
    cd mouse-keyboard-tracker
 2. Install required packages:
    ```bash
