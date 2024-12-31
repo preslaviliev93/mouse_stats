@@ -7,7 +7,7 @@ The **Mouse and Keyboard Tracker** is a Python project designed to monitor and t
 - Tracks the total distance traveled by the mouse cursor in centimeters.
 - Monitors mouse button press events.
 - Tracks the total number of keyboard keys pressed.
-- Stores and updates user statistics in a database.
+
 
 ---
 
